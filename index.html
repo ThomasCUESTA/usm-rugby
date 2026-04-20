@@ -337,7 +337,7 @@
 <div class="top-stripe"></div>
 
 <!-- ═══ ECRAN CONFIG SUPABASE (première ouverture) ═══ -->
-<div id="supabase-config-screen" style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;position:relative;z-index:1;">
+<div id="supabase-config-screen" style="display:none;">
   <div class="config-card">
     <div class="config-title">⚙️ Configuration</div>
     <div style="font-size:14px;color:var(--text-muted);margin-bottom:20px;line-height:1.7;">
@@ -752,15 +752,13 @@
 // ══════════════════════════════════════════════════════════════
 //  SUPABASE CONFIG
 // ══════════════════════════════════════════════════════════════
-const SUPABASE_URL_KEY  = 'usm_sb_url';
-const SUPABASE_ANON_KEY = 'usm_sb_key';
+// ── Clés Supabase intégrées ──
+const SB_URL = 'https://zbeptweiuecyqdtcailx.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpiZXB0d2VpdWVjeXFkdGNhaWx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY2MDg2MDcsImV4cCI6MjA5MjE4NDYwN30.esmfUo7nbGipvVgL8YlNQg_LPXDEk_C8JHYQ1vk6M1Y';
 let db = null;
 
 function getStoredConfig() {
-  return {
-    url: localStorage.getItem(SUPABASE_URL_KEY),
-    key: localStorage.getItem(SUPABASE_ANON_KEY)
-  };
+  return { url: SB_URL, key: SB_KEY };
 }
 
 function initSupabase(url, key) {
@@ -835,15 +833,9 @@ function waitForSupabase(callback, tries = 0) {
 
 window.addEventListener('load', () => {
   waitForSupabase(() => {
-    const cfg = getStoredConfig();
-    if (cfg.url && cfg.key) {
-      initSupabase(cfg.url, cfg.key);
-      document.getElementById('supabase-config-screen').style.display = 'none';
-      checkAuth();
-    } else {
-      document.getElementById('supabase-config-screen').style.display = 'flex';
-      document.getElementById('loading').style.display = 'none';
-    }
+    initSupabase(SB_URL, SB_KEY);
+    document.getElementById('supabase-config-screen').style.display = 'none';
+    checkAuth();
   });
 });
 
